@@ -1,6 +1,6 @@
 # whatsapp_clone
 
-This is a project with learning purposes
+This is a project with learning purposes, made on a course provided by Rivaan Ranawat.
 ## Getting Started
 
 This project is a starting point for a Flutter application.
