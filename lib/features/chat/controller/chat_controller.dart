@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common/utils/utils.dart';
+import '../../../models/chat_contact.dart';
+import '../../../models/message.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../repository/chat_repository.dart';
 
@@ -33,6 +35,14 @@ class ChatController {
       (left) => showSnackBar(context: context, message: left.message, isError: true), 
       (right) => null,
     );
+  }
+
+  Stream<List<ChatContact>> getChatContacts() {
+    return chatRepository.fetchChatContacts();
+  }
+
+  Stream<List<Message>> getChatMessages(String receiverUserId) {
+    return chatRepository.getChatMessageStream(receiverUserId);
   }
 
 }

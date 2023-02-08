@@ -127,7 +127,49 @@ class ChatRepository {
       log(e.toString());
       return left(Failure('Ops'));
     }
+  }
 
+  Stream<List<ChatContact>> fetchChatContacts() {
+    return _users.doc(firebaseAuth.currentUser!.uid)
+      .collection(FirebaseConstants.chats)
+      .snapshots().asyncMap(
+        (event) async {
+          List<ChatContact> contacts = [];
+
+          for (final doc in event.docs) {
+            final chatContact = ChatContact.fromMap(doc.data());
+            final userData = await _users.doc(chatContact.contactUid).get();
+            final user = UserModel.fromMap(userData.data() as Map<String, dynamic>);
+
+            contacts.add(
+              ChatContact(
+                name: user.name, 
+                profilePicture: user.profilePicture, 
+                contactUid: chatContact.contactUid,
+                timeSent: chatContact.timeSent,
+                lastMessage: chatContact.lastMessage,
+              ),
+            );
+          }
+          return contacts;
+        },
+      );
+  }
+
+  Stream<List<Message>> getChatMessageStream(String receiverUserId) {
+    return _users.doc(firebaseAuth.currentUser!.uid)
+      .collection(FirebaseConstants.chats).doc(receiverUserId)
+      .collection(FirebaseConstants.messages)
+      .orderBy('sentTime')
+      .snapshots().map(
+        (event) {
+          List<Message> messages = [];
+          for (final doc in event.docs) {
+            messages.add(Message.fromMap(doc.data()));
+          }
+          return messages;
+        }
+      );
   }
 
 }

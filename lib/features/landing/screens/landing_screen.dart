@@ -13,7 +13,7 @@ class LandingScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     void navigateToLoginScreen() {
-      Navigator.of(context).pushNamed(LoginScreen.routeName);
+      Navigator.pushNamed(context, LoginScreen.routeName);
     }
 
     return Scaffold(

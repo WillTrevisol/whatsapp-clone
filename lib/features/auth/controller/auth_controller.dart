@@ -86,7 +86,8 @@ class AuthController {
     response.fold(
       (left) => showSnackBar(context: context, message: left.message, isError: true), 
       (right) {
-        Navigator.of(context).pushNamedAndRemoveUntil(
+        Navigator.pushNamedAndRemoveUntil(
+          context,
           MobileScreenLayout.routeName, 
           (route) => false,
         );

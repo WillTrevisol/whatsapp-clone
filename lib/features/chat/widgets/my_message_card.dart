@@ -1,9 +1,11 @@
+
+
 import 'package:flutter/material.dart';
 
-import '../colors.dart';
+import '../../../colors.dart';
 
-class SenderMessageCard extends StatelessWidget {
-  const SenderMessageCard({super.key, required this.message, required this.date});
+class MyMessageCard extends StatelessWidget {
+  const MyMessageCard({super.key, required this.message, required this.date});
 
   final String message;
   final String date;
@@ -11,7 +13,7 @@ class SenderMessageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.centerLeft,
+      alignment: Alignment.centerRight,
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width - 45,
@@ -21,7 +23,7 @@ class SenderMessageCard extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8)
           ),
-          color: senderMessageColor,
+          color: messageColor,
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
           child: Stack(
             children: <Widget> [
@@ -35,7 +37,7 @@ class SenderMessageCard extends StatelessWidget {
                 ),
               ),
               Positioned(
-                bottom: 2,
+                bottom: 4,
                 right: 10,
                 child: Row(
                   children: <Widget> [

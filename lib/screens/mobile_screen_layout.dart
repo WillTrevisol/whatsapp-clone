@@ -1,13 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../colors.dart';
+import '../features/auth/controller/auth_controller.dart';
 import '../features/select_contacts/screens/select_contact_screen.dart';
-import '../widgets/contacts_list.dart';
+import '../features/chat/widgets/contacts_list.dart';
+import '../models/user.dart';
 
-class MobileScreenLayout extends StatelessWidget {
+class MobileScreenLayout extends ConsumerStatefulWidget {
   static const String routeName = '/mobile-screen';
-  const MobileScreenLayout({super.key});
+  const MobileScreenLayout({super.key, this.user});
 
+  final UserModel? user;
+
+  @override
+  ConsumerState<MobileScreenLayout> createState() => _MobileScreenLayoutState();
+}
+
+class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        ref.read(userProvider.notifier).update((state) {
+          if (widget.user != null) {
+            return widget.user;
+          }
+          return state;
+        });
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -61,7 +86,7 @@ class MobileScreenLayout extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50)
           ),
-          onPressed: () => Navigator.of(context).pushNamed(SelectContactScreen.routeName),
+          onPressed: () => Navigator.pushNamed(context, SelectContactScreen.routeName),
           backgroundColor: greenColor,
           child: const Icon(
             Icons.comment,

@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../colors.dart';
-import '../../../core/common/widgets/loading_widget.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../widgets/bottom_chat_field.dart';
-import '../../../widgets/chat_list.dart';
+import '../widgets/chat_list.dart';
 
 class MobileChatScreen extends ConsumerWidget {
   static const String routeName = '/chat-screen';
@@ -31,7 +30,7 @@ class MobileChatScreen extends ConsumerWidget {
               stream: ref.read(authControllerProvider).userDataById(uid),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const LoadingWidget();
+                  return Container();
                 }
 
                 return Text(
@@ -62,8 +61,8 @@ class MobileChatScreen extends ConsumerWidget {
       ),
       body: Column(
         children: <Widget> [
-          const Expanded(
-            child: ChatList(),
+          Expanded(
+            child: ChatList(receiverUserId: uid),
           ),
           BottomChatField(
             receiverUserUid: uid,

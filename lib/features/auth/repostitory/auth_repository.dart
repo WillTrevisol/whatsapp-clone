@@ -59,7 +59,7 @@ class AuthRepository {
             await firebaseAuth.signInWithCredential(credential);
           }, 
           codeSent: (String verificationId, int? forceResendingToken) async {
-            Navigator.of(context).pushNamed(OTPScreen.routeName, arguments: verificationId);
+            Navigator.pushNamed(context, OTPScreen.routeName, arguments: verificationId);
           }, 
           codeAutoRetrievalTimeout: (String verificationId) {
 
@@ -96,11 +96,14 @@ class AuthRepository {
 
     try {
       String uid = firebaseAuth.currentUser!.uid;
-      String photoUrl = File(Constants.noProfileAsset).path;
+      String photoUrl;
 
       if (profilePicture != null) {
         photoUrl = await ref.read(firebaseStorageRepositoryProvider)
           .storeFileToFirebase('profilePicture/$uid', profilePicture) as String;
+      } else {
+        photoUrl = await ref.read(firebaseStorageRepositoryProvider)
+          .storeFileToFirebase('profilePicture/$uid', File(Constants.noProfileAsset)) as String;
       }
 
       UserModel user = UserModel(

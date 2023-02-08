@@ -46,9 +46,8 @@ class MyApp extends ConsumerWidget {
           if (data == null) {
             return const LandingScreen();
           }
-          
-          ref.read(userProvider.notifier).update((state) => data);
-          return const MobileScreenLayout();
+
+          return MobileScreenLayout(user: data);
         },
         error: (error, stackTrace) => ErrorScreen(message: error.toString()),
         loading: () => const LoadingWidget(),
