@@ -1,7 +1,6 @@
 # whatsapp_clone
 
-A new Flutter project.
-
+This is a project with learning purposes
 ## Getting Started
 
 This project is a starting point for a Flutter application.
