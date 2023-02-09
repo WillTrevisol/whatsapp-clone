@@ -1,5 +1,7 @@
 
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,32 +35,41 @@ class _ChatListState extends ConsumerState<ChatList> {
   Widget build(BuildContext context) {
     return StreamBuilder<List<Message>>(
       stream: ref.read(chatControllerProvider).getChatMessages(widget.receiverUserId),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<Message>> snapshot) {
 
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container();
         }
 
         SchedulerBinding.instance.addPostFrameCallback((_) {
-          scrollController.jumpTo(scrollController.position.maxScrollExtent);
+          Timer(const Duration(milliseconds: 1000), () => 
+            scrollController.animateTo(
+              scrollController.position.minScrollExtent, 
+              curve: Curves.decelerate, 
+              duration: const Duration(seconds: 1),
+            ),
+          );
         });
 
         return ListView.builder(
           controller: scrollController,
           itemCount: snapshot.data?.length,
+          reverse: true,
           itemBuilder: (context, index) {
 
-            final message = snapshot.data![index];
+            final Message message = snapshot.data!.reversed.toList()[index];
             if (message.receiverUid == widget.receiverUserId) {
               return MyMessageCard(
                 message: message.text,
                 date: DateFormat.Hm().format(message.sentTime),
+                type: message.type,
               );
             }
       
             return SenderMessageCard(
               message: message.text,
               date: DateFormat.Hm().format(message.sentTime),
+              type: message.type,
             );
           },
         );

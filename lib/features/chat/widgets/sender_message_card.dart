@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../../colors.dart';
+import '../../../core/enums/message_enum.dart';
+import 'display_message.dart';
 
 class SenderMessageCard extends StatelessWidget {
-  const SenderMessageCard({super.key, required this.message, required this.date});
+  const SenderMessageCard({super.key, required this.message, required this.date, required this.type});
 
   final String message;
   final String date;
+  final MessageEnum type;
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +29,11 @@ class SenderMessageCard extends StatelessWidget {
           child: Stack(
             children: <Widget> [
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 5, 30, 20),
-                child: Text(
-                  message,
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
+                padding: type == MessageEnum.text ? const EdgeInsets.fromLTRB(10, 5, 30, 20)
+                : const EdgeInsets.fromLTRB(5, 5, 5, 20),
+                child: DisplayMessage(
+                  message: message, 
+                  type: type, 
                 ),
               ),
               Positioned(

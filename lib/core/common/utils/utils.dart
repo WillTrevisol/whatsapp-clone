@@ -1,6 +1,8 @@
 import 'dart:io';
 
+// import 'package:enough_giphy_flutter/enough_giphy_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../colors.dart';
@@ -38,4 +40,54 @@ Future<File?> pickImageFromGalery(BuildContext context) async {
     showSnackBar(context: context, message: 'We have a problem :(', isError: true);
     return null;
   }
+}
+
+Future<File?> pickImageFromCamera(BuildContext context) async {
+  File? image;
+  try {
+    final pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (pickedImage != null) {
+      image = File(pickedImage.path);
+      return image;
+    }
+
+    return image;
+  } catch (e) {
+    showSnackBar(context: context, message: 'We have a problem :(', isError: true);
+    return null;
+  }
+}
+
+Future<File?> pickVideoFromGalery(BuildContext context) async {
+  File? video;
+  try {
+    final pickedVideo = await ImagePicker().pickVideo(source: ImageSource.gallery);
+
+    if (pickedVideo != null) {
+      video = File(pickedVideo.path);
+      return video;
+    }
+
+    return video;
+  } catch (e) {
+    showSnackBar(context: context, message: 'We have a problem :(', isError: true);
+    return null;
+  }
+}
+
+Future<GiphyGif?> pickGIF(BuildContext context) async {
+  //KfUhh9mv2rvNHtD5saxYyem86PTNtsFs
+  GiphyGif? gif;
+  try {
+    gif = await GiphyGet.getGif(
+      context: context, 
+      apiKey: 'KfUhh9mv2rvNHtD5saxYyem86PTNtsFs',
+      lang: GiphyLanguage.portuguese,
+    );
+  } catch (e) {
+    showSnackBar(context: context, message: 'We have a problem :(', isError: true);
+  }
+
+  return gif;
 }

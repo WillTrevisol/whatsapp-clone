@@ -21,6 +21,13 @@ dependencies:
   flutter_contacts: ^1.1.5+1
   uuid: ^3.0.7
   intl: ^0.17.0
+  cached_network_image: ^3.2.3
+  cached_video_player: ^2.0.3
+  emoji_picker_flutter: ^1.5.2
+  giphy_get: ^3.2.0
+  flutter_sound: ^9.2.13
+  permission_handler: ^10.2.0
+  path_provider: ^2.0.12
 
 dev_dependencies:
   flutter_test:

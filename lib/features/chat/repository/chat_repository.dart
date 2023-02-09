@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +11,7 @@ import 'package:whatsapp_clone/models/chat_contact.dart';
 import '../../../core/enums/message_enum.dart';
 import '../../../core/failure.dart';
 import '../../../core/firebase_constants.dart';
+import '../../../core/repositories/firebase_storage_repository.dart';
 import '../../../core/typedefs.dart';
 import '../../../models/message.dart';
 import '../../../models/user.dart';
@@ -126,6 +128,94 @@ class ChatRepository {
     } catch (e) {
       log(e.toString());
       return left(Failure('Ops'));
+    }
+  }
+
+  FutureVoid sendGifMessage({
+    required String gifUrl,
+    required String receiverUserUid,
+    required UserModel senderUser,
+  }) async {
+
+    try {
+      final sentTime = DateTime.now();
+      UserModel receiverUserData;
+
+      final receiverData = await _users.doc(receiverUserUid).get();
+      receiverUserData = UserModel.fromMap(receiverData.data() as Map<String, dynamic>);
+      final messageId = const Uuid().v1();
+
+      _saveDataToContactsSubCollection(senderUser, receiverUserData, '🔥 GIF', sentTime);
+      return right(_saveMessageToMessageColletion(
+        receiverUserUid: receiverUserUid, 
+        text: gifUrl,
+        sentTime: sentTime, 
+        messageId: messageId,
+        userName: senderUser.name, 
+        receiverUserName: receiverUserData.name, 
+        messageType: MessageEnum.gif,
+      ));
+
+    } catch (e) {
+      log(e.toString());
+      return left(Failure('Ops'));
+    }
+  }
+
+  FutureVoid sendFileMessage({
+    required File file,
+    required String recieverUserUid,
+    required UserModel senderUserData,
+    required Ref ref,
+    required MessageEnum messageEnum,
+  }) async {
+    try {
+
+      final sentTime = DateTime.now();
+      final messageId = const Uuid().v1();
+
+      String? fileUrl = await ref.read(firebaseStorageRepositoryProvider)
+        .storeFileToFirebase(
+          'chat/${messageEnum.type}/${senderUserData.uid}/$recieverUserUid/$messageId',
+          file,
+        );
+
+      UserModel recieverUserData;
+      final receiverMap = await _users.doc(recieverUserUid).get();
+      recieverUserData =  UserModel.fromMap(receiverMap.data() as Map<String, dynamic>);
+
+      String contactTileMessage = '';
+      switch (messageEnum) {
+        case MessageEnum.image:
+          contactTileMessage = '📷 Photo';
+          break;
+        case MessageEnum.audio:
+          contactTileMessage = '🔊 Audio';
+          break;
+        case MessageEnum.video:
+          contactTileMessage = '🎥 Video';
+          break;
+        case MessageEnum.gif:
+          contactTileMessage = '🔥 GIF';
+          break;
+        default:
+          contactTileMessage = '🔥';
+      }
+
+      _saveDataToContactsSubCollection(senderUserData, recieverUserData, contactTileMessage, sentTime);
+
+      return right(_saveMessageToMessageColletion(
+        receiverUserUid: recieverUserUid, 
+        text: fileUrl??'',
+        sentTime: sentTime,
+        messageId: messageId,
+        userName: senderUserData.name,
+        receiverUserName: recieverUserData.name,
+        messageType: messageEnum,
+      ));
+    } catch (e) {
+      log(e.toString());
+      return left(Failure('We have a problem :('));
     }
   }
 

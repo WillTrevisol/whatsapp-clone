@@ -125,5 +125,11 @@ class AuthRepository {
   Stream<UserModel> userData(String uid) {
     return _users.doc(uid).snapshots().map((event) => UserModel.fromMap(event.data() as Map<String, dynamic>));
   }
+
+  void setUserState(bool isOnline) async {
+    await _users.doc(firebaseAuth.currentUser!.uid).update({
+      'isOnline': isOnline,
+    });
+  }
   
 }
