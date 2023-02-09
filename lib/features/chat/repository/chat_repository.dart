@@ -11,6 +11,7 @@ import 'package:whatsapp_clone/models/chat_contact.dart';
 import '../../../core/enums/message_enum.dart';
 import '../../../core/failure.dart';
 import '../../../core/firebase_constants.dart';
+import '../../../core/providers/message_reply_provider.dart';
 import '../../../core/repositories/firebase_storage_repository.dart';
 import '../../../core/typedefs.dart';
 import '../../../models/message.dart';
@@ -77,7 +78,12 @@ class ChatRepository {
     required String userName,
     required String receiverUserName,
     required MessageEnum messageType,
+    required MessageReply? messageReply,
+    required String senderUserName,
+    required MessageEnum repliedMessageType,
   }) async {
+    
+    final messageReplyIsNull = messageReply == null;
     final Message message = Message(
       senderUid: firebaseAuth.currentUser!.uid, 
       receiverUid: receiverUserUid,
@@ -86,6 +92,9 @@ class ChatRepository {
       sentTime: sentTime, 
       messageId: messageId, 
       isSeen: false,
+      repliedMessage: messageReplyIsNull ? '' : messageReply.message,
+      repliedTo: messageReplyIsNull ? '' : messageReply.isMe ? senderUserName : receiverUserName,
+      repliedMessageType: repliedMessageType,
     );
 
     await _users.doc(firebaseAuth.currentUser!.uid)
@@ -104,6 +113,7 @@ class ChatRepository {
     required String text,
     required String receiverUserUid,
     required UserModel senderUser,
+    required MessageReply? messageReply,
   }) async {
 
     try {
@@ -123,6 +133,9 @@ class ChatRepository {
         userName: senderUser.name, 
         receiverUserName: receiverUserData.name, 
         messageType: MessageEnum.text,
+        messageReply: messageReply,
+        repliedMessageType: messageReply == null ? MessageEnum.text : messageReply.messageEnum,
+        senderUserName: senderUser.name,
       ));
 
     } catch (e) {
@@ -135,6 +148,7 @@ class ChatRepository {
     required String gifUrl,
     required String receiverUserUid,
     required UserModel senderUser,
+    required MessageReply? messageReply,
   }) async {
 
     try {
@@ -154,6 +168,9 @@ class ChatRepository {
         userName: senderUser.name, 
         receiverUserName: receiverUserData.name, 
         messageType: MessageEnum.gif,
+        messageReply: messageReply,
+        repliedMessageType: messageReply == null ? MessageEnum.text : messageReply.messageEnum,
+        senderUserName: senderUser.name,
       ));
 
     } catch (e) {
@@ -168,6 +185,7 @@ class ChatRepository {
     required UserModel senderUserData,
     required Ref ref,
     required MessageEnum messageEnum,
+    required MessageReply? messageReply,
   }) async {
     try {
 
@@ -212,7 +230,36 @@ class ChatRepository {
         userName: senderUserData.name,
         receiverUserName: recieverUserData.name,
         messageType: messageEnum,
+        messageReply: messageReply,
+        repliedMessageType: messageReply == null ? MessageEnum.text : messageReply.messageEnum,
+        senderUserName: senderUserData.name,
       ));
+    } catch (e) {
+      log(e.toString());
+      return left(Failure('We have a problem :('));
+    }
+  }
+
+  FutureVoid setSeenMessage({
+    required String recieverUserUid,
+    required String messageId,
+  }) async {
+    try {
+
+    await _users.doc(firebaseAuth.currentUser!.uid)
+      .collection(FirebaseConstants.chats).doc(recieverUserUid)
+      .collection(FirebaseConstants.messages).doc(messageId)
+      .update({
+        'isSeen' : true,
+      });
+
+      return right(await _users.doc(recieverUserUid)
+        .collection(FirebaseConstants.chats).doc(firebaseAuth.currentUser!.uid)
+        .collection(FirebaseConstants.messages).doc(messageId)
+        .update({
+          'isSeen': true,
+        }),
+      );
     } catch (e) {
       log(e.toString());
       return left(Failure('We have a problem :('));

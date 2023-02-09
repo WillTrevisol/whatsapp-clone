@@ -8,6 +8,10 @@ class Message {
   final DateTime sentTime;
   final String messageId;
   final bool isSeen;
+  final String repliedMessage;
+  final String repliedTo;
+  final MessageEnum repliedMessageType;
+
   Message({
     required this.senderUid,
     required this.receiverUid,
@@ -16,8 +20,11 @@ class Message {
     required this.sentTime,
     required this.messageId,
     required this.isSeen,
+    required this.repliedMessage,
+    required this.repliedTo,
+    required this.repliedMessageType,
   });
-
+  
   Message copyWith({
     String? senderUid,
     String? receiverUid,
@@ -26,6 +33,9 @@ class Message {
     DateTime? sentTime,
     String? messageId,
     bool? isSeen,
+    String? repliedMessage,
+    String? repliedTo,
+    MessageEnum? repliedMessageType,
   }) {
     return Message(
       senderUid: senderUid ?? this.senderUid,
@@ -35,6 +45,9 @@ class Message {
       sentTime: sentTime ?? this.sentTime,
       messageId: messageId ?? this.messageId,
       isSeen: isSeen ?? this.isSeen,
+      repliedMessage: repliedMessage ?? this.repliedMessage,
+      repliedTo: repliedTo ?? this.repliedTo,
+      repliedMessageType: repliedMessageType ?? this.repliedMessageType,
     );
   }
 
@@ -47,6 +60,9 @@ class Message {
       'sentTime': sentTime.millisecondsSinceEpoch,
       'messageId': messageId,
       'isSeen': isSeen,
+      'repliedMessage': repliedMessage,
+      'repliedTo': repliedTo,
+      'repliedMessageType': repliedMessageType.type,
     };
   }
 
@@ -59,11 +75,14 @@ class Message {
       sentTime: DateTime.fromMillisecondsSinceEpoch(map['sentTime'] as int),
       messageId: map['messageId'] as String,
       isSeen: map['isSeen'] as bool,
+      repliedMessage: map['repliedMessage'] as String,
+      repliedTo: map['repliedTo'] as String,
+      repliedMessageType: (map['repliedMessageType'] as String).toEnum(),
     );
   }
 
   @override
   String toString() {
-    return 'Message(senderUid: $senderUid, receiverUid: $receiverUid, text: $text, type: $type, sentTime: $sentTime, messageId: $messageId, isSeen: $isSeen)';
+    return 'Message(senderUid: $senderUid, receiverUid: $receiverUid, text: $text, type: $type, sentTime: $sentTime, messageId: $messageId, isSeen: $isSeen, repliedMessage: $repliedMessage, repliedTo: $repliedTo, repliedMessageType: $repliedMessageType)';
   }
 }

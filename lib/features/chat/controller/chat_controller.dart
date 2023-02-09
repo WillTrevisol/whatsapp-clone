@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common/utils/utils.dart';
 import '../../../core/enums/message_enum.dart';
+import '../../../core/providers/message_reply_provider.dart';
 import '../../../models/chat_contact.dart';
 import '../../../models/message.dart';
 import '../../auth/controller/auth_controller.dart';
@@ -28,11 +29,15 @@ class ChatController {
   ChatController({required this.chatRepository, required this.ref});
 
   void sendTextMessage(BuildContext context, String text, String recieverUserUid) async {
+    final messageReply = ref.read(messageReplyProvider);
     final response = await chatRepository.sendTextMessage(
       text: text, 
       receiverUserUid: recieverUserUid, 
       senderUser: ref.read(userProvider)!,
+      messageReply: messageReply,
     );
+
+    ref.read(messageReplyProvider.notifier).update((state) => null);
 
     response.fold(
       (left) => showSnackBar(context: context, message: left.message, isError: true), 
@@ -41,12 +46,14 @@ class ChatController {
   }
 
   void sendFileMessage(BuildContext context, File file, String recieverUserUid, MessageEnum messageEnum) async {
+    final messageReply = ref.read(messageReplyProvider);
     final response = await chatRepository.sendFileMessage(
       file: file,
       recieverUserUid: recieverUserUid,
       senderUserData: ref.read(userProvider)!,
       ref: ref,
       messageEnum: messageEnum,
+      messageReply: messageReply
     );
 
     response.fold(
@@ -62,11 +69,23 @@ class ChatController {
     String gifSlug = gifUrl.substring(gifUrlPartIndex);
     String completeGifString = 'https://i.giphy.com/media/$gifSlug/200.gif';
 
+    final messageReply = ref.read(messageReplyProvider);
+    
     final response = await chatRepository.sendGifMessage(
       gifUrl: completeGifString, 
       receiverUserUid: recieverUserUid, 
       senderUser: ref.read(userProvider)!,
+      messageReply: messageReply,
     );
+
+    response.fold(
+      (left) => showSnackBar(context: context, message: left.message, isError: true), 
+      (right) => null,
+    );
+  }
+
+  void setSeenMessage(BuildContext context, String recieverUserUid, String messageId) async {
+    final response = await chatRepository.setSeenMessage(recieverUserUid: recieverUserUid, messageId: messageId);
 
     response.fold(
       (left) => showSnackBar(context: context, message: left.message, isError: true), 

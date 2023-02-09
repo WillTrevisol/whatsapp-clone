@@ -10,7 +10,9 @@ import 'package:whatsapp_clone/core/common/utils/utils.dart';
 
 import '../../../colors.dart';
 import '../../../core/enums/message_enum.dart';
+import '../../../core/providers/message_reply_provider.dart';
 import '../controller/chat_controller.dart';
+import 'message_reply_preview.dart';
 
 class BottomChatField extends ConsumerStatefulWidget {
   const BottomChatField({
@@ -146,8 +148,14 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    final messageReply = ref.watch(messageReplyProvider);
+    final showMessageReplyPreview = messageReply != null;
+
     return Column(
       children: <Widget> [
+        if (showMessageReplyPreview)
+          const MessageReplyPreview(),
         Row(
           children: <Widget> [
             Expanded(
@@ -250,7 +258,7 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
                   contentPadding: const EdgeInsets.all(10),
                   hintText: 'Message',
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(30),
                     borderSide: const BorderSide(
                       width: 0,
                       style: BorderStyle.none,
