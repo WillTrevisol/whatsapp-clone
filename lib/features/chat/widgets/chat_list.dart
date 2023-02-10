@@ -16,9 +16,14 @@ import 'sender_message_card.dart';
 import '../controller/chat_controller.dart';
 
 class ChatList extends ConsumerStatefulWidget {
-  const ChatList({super.key, required this.receiverUserId});
+  const ChatList({
+    super.key, 
+    required this.receiverUserId, 
+    required this.isGroupChat,
+  });
 
   final String receiverUserId;
+  final bool isGroupChat;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatListState();
@@ -51,7 +56,9 @@ class _ChatListState extends ConsumerState<ChatList> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Message>>(
-      stream: ref.read(chatControllerProvider).getChatMessages(widget.receiverUserId),
+      stream: widget.isGroupChat ? 
+        ref.read(chatControllerProvider).getGroupMessages(widget.receiverUserId) : 
+        ref.read(chatControllerProvider).getChatMessages(widget.receiverUserId),
       builder: (BuildContext context, AsyncSnapshot<List<Message>> snapshot) {
 
         if (snapshot.connectionState == ConnectionState.waiting) {

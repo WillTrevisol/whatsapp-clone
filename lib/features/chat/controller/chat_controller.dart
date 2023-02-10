@@ -8,6 +8,7 @@ import '../../../core/enums/message_enum.dart';
 import '../../../core/providers/message_reply_provider.dart';
 import '../../../models/chat_contact.dart';
 import '../../../models/message.dart';
+import '../../../models/group.dart' as model;
 import '../../auth/controller/auth_controller.dart';
 import '../repository/chat_repository.dart';
 
@@ -28,13 +29,14 @@ class ChatController {
 
   ChatController({required this.chatRepository, required this.ref});
 
-  void sendTextMessage(BuildContext context, String text, String recieverUserUid) async {
+  void sendTextMessage(BuildContext context, String text, String recieverUserUid, bool isGroupChat) async {
     final messageReply = ref.read(messageReplyProvider);
     final response = await chatRepository.sendTextMessage(
       text: text, 
       receiverUserUid: recieverUserUid, 
       senderUser: ref.read(userProvider)!,
       messageReply: messageReply,
+      isGroupChat: isGroupChat,
     );
 
     ref.read(messageReplyProvider.notifier).update((state) => null);
@@ -45,7 +47,7 @@ class ChatController {
     );
   }
 
-  void sendFileMessage(BuildContext context, File file, String recieverUserUid, MessageEnum messageEnum) async {
+  void sendFileMessage(BuildContext context, File file, String recieverUserUid, MessageEnum messageEnum, bool isGroupChat) async {
     final messageReply = ref.read(messageReplyProvider);
     final response = await chatRepository.sendFileMessage(
       file: file,
@@ -53,7 +55,8 @@ class ChatController {
       senderUserData: ref.read(userProvider)!,
       ref: ref,
       messageEnum: messageEnum,
-      messageReply: messageReply
+      messageReply: messageReply,
+      isGroupChat: isGroupChat,
     );
 
     response.fold(
@@ -62,7 +65,7 @@ class ChatController {
     );
   }
 
-  void sendGifMessage(BuildContext context, String gifUrl, String recieverUserUid) async {
+  void sendGifMessage(BuildContext context, String gifUrl, String recieverUserUid, bool isGroupChat) async {
 
     int gifUrlPartIndex = gifUrl.lastIndexOf('-') + 1;
 
@@ -76,6 +79,7 @@ class ChatController {
       receiverUserUid: recieverUserUid, 
       senderUser: ref.read(userProvider)!,
       messageReply: messageReply,
+      isGroupChat: isGroupChat,
     );
 
     response.fold(
@@ -97,8 +101,16 @@ class ChatController {
     return chatRepository.fetchChatContacts();
   }
 
+  Stream<List<model.Group>> getChatGroups() {
+    return chatRepository.fetchChatGroups();
+  }
+
   Stream<List<Message>> getChatMessages(String receiverUserId) {
     return chatRepository.getChatMessageStream(receiverUserId);
+  }
+
+  Stream<List<Message>> getGroupMessages(String groupId) {
+    return chatRepository.getGroupMessageStream(groupId);
   }
 
 }

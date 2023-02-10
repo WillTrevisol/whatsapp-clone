@@ -6,6 +6,7 @@ import 'core/common/widgets/error_screen.dart';
 import 'features/auth/screens/login_screen.dart';
 import 'features/auth/screens/otp_screen.dart';
 import 'features/auth/screens/user_information_screen.dart';
+import 'features/group/screens/create_group_screen.dart';
 import 'features/select_contacts/screens/select_contact_screen.dart';
 import 'features/chat/screens/chat_screen.dart';
 import 'features/status/screens/confirm_status_screen.dart';
@@ -35,6 +36,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => MobileChatScreen(
         name: arguments['name'], 
         uid: arguments['uid'],
+        isGroupChat: arguments['isGroupChat'],
       ));
 
     case ConfirmStatusScreen.routeName:
@@ -48,6 +50,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => StatusScreen(
         status: arguments,
       ));
+
+    case CreateGroupScreen.routeName: 
+      return MaterialPageRoute(builder: (context) => const CreateGroupScreen());
     
     default:
       return MaterialPageRoute(builder: (context) => const Scaffold(body: ErrorScreen(message: 'Page not Found')));

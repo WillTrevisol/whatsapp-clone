@@ -6,6 +6,7 @@ import 'package:whatsapp_clone/core/common/utils/utils.dart';
 
 import '../colors.dart';
 import '../features/auth/controller/auth_controller.dart';
+import '../features/group/screens/create_group_screen.dart';
 import '../features/select_contacts/screens/select_contact_screen.dart';
 import '../features/chat/widgets/contacts_list.dart';
 import '../features/status/screens/confirm_status_screen.dart';
@@ -61,6 +62,13 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
     }
   }
 
+  void navigateToCreateScreen(BuildContext context) {
+    Navigator.pushNamed(
+      context, 
+      CreateGroupScreen.routeName,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -86,12 +94,17 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
                 color: Colors.grey,
               ),
             ),
-            IconButton(
-              onPressed: () {}, 
+            PopupMenuButton(
               icon: const Icon(
-                Icons.more_vert,
+                Icons.more_vert_rounded,
                 color: Colors.grey,
               ),
+              itemBuilder: (context) => [
+                 PopupMenuItem(
+                  child: const Text('Create a group'),
+                  onTap: () => Future(() => navigateToCreateScreen(context)),
+                ),
+              ],
             ),
           ],
           bottom: TabBar(

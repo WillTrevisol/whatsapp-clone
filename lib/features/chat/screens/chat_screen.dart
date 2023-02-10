@@ -12,10 +12,12 @@ class MobileChatScreen extends ConsumerWidget {
     Key? key,
     required this.name,
     required this.uid,
+    required this.isGroupChat,
   }) : super(key: key);
 
   final String name;
   final String uid;
+  final bool isGroupChat;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,21 +28,22 @@ class MobileChatScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget> [
             Text(name),
-            StreamBuilder(
-              stream: ref.read(authControllerProvider).userDataById(uid),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Container();
-                }
+            if (!isGroupChat)
+              StreamBuilder(
+                stream: ref.read(authControllerProvider).userDataById(uid),
+                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container();
+                  }
 
-                return Text(
-                  snapshot.data?.isOnline ? 'online' : 'offline',
-                  style: const TextStyle(
-                    fontSize: 12,
-                  ),
-                );
-              },
-            ),
+                  return Text(
+                    snapshot.data?.isOnline ? 'online' : 'offline',
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  );
+                },
+              ),
           ],
         ),
         centerTitle: false,
@@ -69,10 +72,14 @@ class MobileChatScreen extends ConsumerWidget {
         child: Column(
           children: <Widget> [
             Expanded(
-              child: ChatList(receiverUserId: uid),
+              child: ChatList(
+                receiverUserId: uid,
+                isGroupChat: isGroupChat,
+              ),
             ),
             BottomChatField(
               recieverUserUid: uid,
+              isGroupChat: isGroupChat,
             ),
           ],
         ),
