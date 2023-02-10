@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:swipe_to/swipe_to.dart';
 
-import '../../../colors.dart';
+import '../../../core/common/utils/colors.dart';
 import '../../../core/enums/message_enum.dart';
 import 'display_message.dart';
 

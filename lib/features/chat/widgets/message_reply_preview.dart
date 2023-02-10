@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../colors.dart';
+import '../../../core/common/utils/colors.dart';
 import '../../../core/providers/message_reply_provider.dart';
 import 'display_message.dart';
 

@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/core/common/utils/utils.dart';
 
-import '../colors.dart';
-import '../features/auth/controller/auth_controller.dart';
-import '../features/group/screens/create_group_screen.dart';
-import '../features/select_contacts/screens/select_contact_screen.dart';
-import '../features/chat/widgets/contacts_list.dart';
-import '../features/status/screens/confirm_status_screen.dart';
-import '../features/status/screens/status_contact_screen.dart';
-import '../models/user.dart';
+import 'core/common/utils/colors.dart';
+import 'features/auth/controller/auth_controller.dart';
+import 'features/group/screens/create_group_screen.dart';
+import 'features/select_contacts/screens/select_contact_screen.dart';
+import 'features/chat/widgets/contacts_list.dart';
+import 'features/status/screens/confirm_status_screen.dart';
+import 'features/status/screens/status_contact_screen.dart';
+import 'models/user.dart';
 
 class MobileScreenLayout extends ConsumerStatefulWidget {
   static const String routeName = '/mobile-screen';

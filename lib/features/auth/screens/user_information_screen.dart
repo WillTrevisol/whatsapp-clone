@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../colors.dart';
+import '../../../core/common/utils/colors.dart';
 import '../../../core/common/utils/utils.dart';
 import '../../../core/constants.dart';
 import '../controller/auth_controller.dart';

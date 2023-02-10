@@ -12,7 +12,7 @@ import 'features/chat/screens/chat_screen.dart';
 import 'features/status/screens/confirm_status_screen.dart';
 import 'features/status/screens/status_screen.dart';
 import 'models/status.dart';
-import 'screens/mobile_screen_layout.dart';
+import 'mobile_screen_layout.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {

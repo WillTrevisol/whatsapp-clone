@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../colors.dart';
+import '../../../core/common/utils/colors.dart';
 import '../controller/status_controller.dart';
 
 class ConfirmStatusScreen extends ConsumerWidget {

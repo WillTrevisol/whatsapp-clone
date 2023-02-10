@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../colors.dart';
+import '../../../core/common/utils/colors.dart';
 import '../../auth/controller/auth_controller.dart';
 import '../../call/controller/call_controller.dart';
 import '../widgets/bottom_chat_field.dart';

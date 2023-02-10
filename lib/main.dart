@@ -2,14 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'colors.dart';
+import 'core/common/utils/colors.dart';
 import 'core/common/widgets/error_screen.dart';
 import 'core/common/widgets/loading_widget.dart';
 import 'features/auth/controller/auth_controller.dart';
 import 'features/landing/screens/landing_screen.dart';
 import 'firebase_options.dart';
 import 'router.dart';
-import 'screens/mobile_screen_layout.dart';
+import 'mobile_screen_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

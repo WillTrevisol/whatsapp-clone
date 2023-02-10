@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/common/utils/utils.dart';
 import '../../../models/user.dart';
-import '../../../screens/mobile_screen_layout.dart';
+import '../../../mobile_screen_layout.dart';
 import '../repostitory/auth_repository.dart';
 import '../screens/user_information_screen.dart';
 

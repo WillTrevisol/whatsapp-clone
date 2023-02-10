@@ -2,7 +2,7 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
-import '../../../colors.dart';
+import '../../../core/common/utils/colors.dart';
 import '../../../core/common/widgets/error_screen.dart';
 import '../../../core/common/widgets/loading_widget.dart';
 import '../../select_contacts/controller/select_contact_controller.dart';

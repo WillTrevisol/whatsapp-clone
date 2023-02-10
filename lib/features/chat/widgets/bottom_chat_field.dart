@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:whatsapp_clone/core/common/utils/utils.dart';
 
-import '../../../colors.dart';
+import '../../../core/common/utils/colors.dart';
 import '../../../core/enums/message_enum.dart';
 import '../../../core/providers/message_reply_provider.dart';
 import '../controller/chat_controller.dart';
