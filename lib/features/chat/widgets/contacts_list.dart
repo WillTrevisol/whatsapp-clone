@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/common/widgets/loading_widget.dart';
 import '../../../models/group.dart';
 import '../controller/chat_controller.dart';
 import '../screens/chat_screen.dart';
@@ -41,6 +40,7 @@ class ContactsList extends ConsumerWidget {
                         'name': chatGroup.name,
                         'uid': chatGroup.groupId,
                         'isGroupChat': true,
+                        'profilePicture': chatGroup.groupProfilePicture,
                       }
                     ),
                     child: Padding(
@@ -108,6 +108,7 @@ class ContactsList extends ConsumerWidget {
                         'name': chatContact.name,
                         'uid': chatContact.contactUid,
                         'isGroupChat': false,
+                        'profilePicture': chatContact.profilePicture,
                       }
                     ),
                     child: Padding(

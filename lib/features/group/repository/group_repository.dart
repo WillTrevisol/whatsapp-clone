@@ -42,7 +42,6 @@ class GroupRepository {
 
   FutureVoid createGroup(String groupName, File file, List<Contact> contacts) async {
     try {
-      List<String> uid = [];
       List<String>? usersUid = [];
       final users = await _users.get();
 

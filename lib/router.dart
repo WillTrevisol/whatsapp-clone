@@ -37,6 +37,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         name: arguments['name'], 
         uid: arguments['uid'],
         isGroupChat: arguments['isGroupChat'],
+        profilePicture: arguments['profilePicture'],
       ));
 
     case ConfirmStatusScreen.routeName:

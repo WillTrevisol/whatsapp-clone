@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../colors.dart';
 import '../../auth/controller/auth_controller.dart';
+import '../../call/controller/call_controller.dart';
 import '../widgets/bottom_chat_field.dart';
 import '../widgets/chat_list.dart';
 
@@ -13,11 +14,18 @@ class MobileChatScreen extends ConsumerWidget {
     required this.name,
     required this.uid,
     required this.isGroupChat,
+    required this.profilePicture,
   }) : super(key: key);
 
   final String name;
   final String uid;
+  final String profilePicture;
   final bool isGroupChat;
+
+  void makeCall(BuildContext context, WidgetRef ref) {
+    ref.read(callControllerProvider)
+      .makeCall(context, name, uid, profilePicture, isGroupChat);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,10 +60,11 @@ class MobileChatScreen extends ConsumerWidget {
             onPressed: () {},
             icon: const Icon(Icons.video_call),
           ),
+          !isGroupChat ?
           IconButton(
-            onPressed: () {},
+            onPressed: () => makeCall(context, ref),
             icon: const Icon(Icons.call),
-          ),
+          ) : Container(),
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.more_vert),
