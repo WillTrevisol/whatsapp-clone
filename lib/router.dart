@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'core/common/widgets/error_screen.dart';
@@ -6,6 +8,9 @@ import 'features/auth/screens/otp_screen.dart';
 import 'features/auth/screens/user_information_screen.dart';
 import 'features/select_contacts/screens/select_contact_screen.dart';
 import 'features/chat/screens/chat_screen.dart';
+import 'features/status/screens/confirm_status_screen.dart';
+import 'features/status/screens/status_screen.dart';
+import 'models/status.dart';
 import 'screens/mobile_screen_layout.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -30,6 +35,18 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => MobileChatScreen(
         name: arguments['name'], 
         uid: arguments['uid'],
+      ));
+
+    case ConfirmStatusScreen.routeName:
+      final arguments = settings.arguments as File;
+      return MaterialPageRoute(builder: (context) => ConfirmStatusScreen(
+        file: arguments,
+      ));
+
+    case StatusScreen.routeName:
+      final arguments = settings.arguments as Status;
+      return MaterialPageRoute(builder: (context) => StatusScreen(
+        status: arguments,
       ));
     
     default:

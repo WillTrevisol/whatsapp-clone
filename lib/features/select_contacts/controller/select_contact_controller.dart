@@ -43,7 +43,7 @@ class SelectContactController {
           });
           return;
         }
-        if (!right) {
+        if (!right['isFound']) {
           showSnackBar(context: context, message: 'User not found.\nInvite him to this app! :)');
           return;
         }

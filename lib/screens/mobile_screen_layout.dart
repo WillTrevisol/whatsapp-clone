@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:whatsapp_clone/core/common/utils/utils.dart';
 
 import '../colors.dart';
 import '../features/auth/controller/auth_controller.dart';
 import '../features/select_contacts/screens/select_contact_screen.dart';
 import '../features/chat/widgets/contacts_list.dart';
+import '../features/status/screens/confirm_status_screen.dart';
+import '../features/status/screens/status_contact_screen.dart';
 import '../models/user.dart';
 
 class MobileScreenLayout extends ConsumerStatefulWidget {
@@ -17,7 +22,10 @@ class MobileScreenLayout extends ConsumerStatefulWidget {
   ConsumerState<MobileScreenLayout> createState() => _MobileScreenLayoutState();
 }
 
-class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout> with WidgetsBindingObserver {
+class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout> 
+  with WidgetsBindingObserver, TickerProviderStateMixin {
+
+  late TabController tabController;
 
   @override
   void initState() {
@@ -34,6 +42,7 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout> with Wi
       },
     );
     WidgetsBinding.instance.addObserver(this);
+    tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -85,30 +94,50 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout> with Wi
               ),
             ),
           ],
-          bottom: const TabBar(
+          bottom: TabBar(
+            controller: tabController,
             indicatorColor: greenColor,
             indicatorWeight: 4,
             labelColor: greenColor,
             unselectedLabelColor: Colors.grey,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
-            tabs: <Widget> [
-              Tab(text: 'CHATS',),
-              Tab(text: 'STATUS',),
-              Tab(text: 'CALLS',),
+            tabs: const <Widget> [
+              Tab(text: 'CHATS'),
+              Tab(text: 'STATUS'),
+              Tab(text: 'CALLS'),
             ],
           ),
         ),
-        body: const ContactsList(),
+        body: TabBarView(
+          controller: tabController,
+          children: const <Widget> [
+            ContactsList(),
+            StatusContactsScreen(),
+            Text('CALLS'),
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50)
           ),
-          onPressed: () => Navigator.pushNamed(context, SelectContactScreen.routeName),
+          onPressed: () async {
+            if (tabController.index == 0) {
+              Navigator.pushNamed(context, SelectContactScreen.routeName);
+            }
+
+            if (tabController.index == 1) {
+              File? image = await pickImageFromGalery(context);
+              if (image != null) {
+                // ignore: use_build_context_synchronously
+                Navigator.pushNamed(context, ConfirmStatusScreen.routeName, arguments: image);
+              }
+            }
+          },
           backgroundColor: greenColor,
           child: const Icon(
-            Icons.comment,
+             Icons.comment,
             color: Colors.white,
           ),
         ),
